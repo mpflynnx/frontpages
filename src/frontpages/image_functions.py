@@ -21,7 +21,8 @@ def pngConvert(abspath):
         if infile != outfile:
             try:
                 with Image.open(infile) as im:
-                    im.save(outfile, quality=95)
+                    rgb_im = im.convert("RGB")
+                    rgb_im.save(outfile, quality=95)
             except OSError:
                 print("cannot convert", infile)
 
