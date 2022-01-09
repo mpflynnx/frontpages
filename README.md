@@ -3,7 +3,7 @@
 
 # frontpages
 
-Frontpages is a Python command line application, which will download, convert, apply exif data and rename English newspaper front page images files from the BBC News website.
+Frontpages is a Python command line application, which will download, convert, apply exif data and rename English newspaper front page image files from the BBC News website.
 
 
 
