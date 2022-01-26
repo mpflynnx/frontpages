@@ -1,0 +1,7 @@
+---
+repos:
+  - repo: https://github.com/Woile/commitizen
+    rev: v1.23.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
