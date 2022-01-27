@@ -36,10 +36,6 @@ def rename_all4(myfile, string):
     return
 
 
-#  problem matches this _112292543_aroundthebbc-iplayerfulllogo-nc why?
-# see new regex below
-# doesn't match _122081442_expressfront14dec.jpg
-# will match _121856649_express-nc.png
 def match(mylist):
     """
     Return a list of regex matching items from mylist.
@@ -47,8 +43,7 @@ def match(mylist):
     matches = []
     count = 0
     for i in range(len(mylist)):
-        #  regex = re.compile(r"^_12\d{7}_\w+-nc|-\w+-nc")
-        regex = re.compile(r"(?:^_12\d{7}_){1}(\w+-nc){1}|(?:^_12\d{7}){1}(-\w+-nc){1}")
+        regex = re.compile(r"^_12\d{7}.+")
         if re.search(regex, basename(mylist[i])):
             count += 1
             matches.append(mylist[i])
@@ -56,20 +51,20 @@ def match(mylist):
     return matches
 
 
-# will match _122081442_expressfront14dec.jpg
-def match2(mylist):
-    """
-    Return a list of regex matching items from mylist.
-    """
-    matches = []
-    count = 0
-    for i in range(len(mylist)):
-        regex = re.compile(r"^_12\d{7}_\w+")
-        if re.search(regex, basename(mylist[i])):
-            count += 1
-            matches.append(mylist[i])
-    print("Found " + str(count) + " images.")
-    return matches
+#  def match2(mylist):
+    #  """
+    #  Return a list of regex matching items from mylist.
+    #  """
+    #  matches = []
+    #  count = 0
+    #  for i in range(len(mylist)):
+        #  #  regex = re.compile(r"^_12\d{7}_\w+")
+        #  regex = re.compile(r"^_12\d{7}_.+.jpg$") # must end in .jpg
+        #  if re.search(regex, basename(mylist[i])):
+            #  count += 1
+            #  matches.append(mylist[i])
+    #  print("Found " + str(count) + " images.")
+    #  return matches
 
 
 def prepend_date(myfiles):
