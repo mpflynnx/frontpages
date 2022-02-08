@@ -21,7 +21,7 @@ dt_string = now.strftime("%Y:%m:%d %H:%M:%S")
 
 def main():
 
-    save_location = Path.home() / "Pictures" / "from-samsung-j3"
+    save_location = Path.home() / "newspaper" / "front-pages"
     Path.mkdir(save_location, parents=True, exist_ok=True)
 
     list1 = file_functions.files_list(save_location)
@@ -43,9 +43,6 @@ def main():
     img_list1 = web_functions.get_images(fulllink)
 
     match_list1 = file_functions.match(img_list1)
-
-#      if not len(match_list1) > 4:  # try again using different regex
-        #  match_list1 = file_functions.match2(img_list1)
 
     if not len(match_list1) > 4:
         raise ValueError("No images found, exiting.")
