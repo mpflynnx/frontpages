@@ -1,6 +1,6 @@
 """Top-level package for frontpages."""
 
-__version__ = "1.0.0"
+__version__ = "0.1.1"
 
 from .file_functions import *  # noqa
 from .image_functions import *  # noqa
