@@ -33,7 +33,7 @@ exclude = [
     "src/frontpages/tags"]
 
 [tool.commitizen]
-version = "0.1.1"
+version = "0.1.2"
 tag_format = "v$version"
 version_files = [
   "pyproject.toml:version",
