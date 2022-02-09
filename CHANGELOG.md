@@ -1,3 +1,9 @@
+## v0.2.0 (2022-02-09)
+
+### Feat
+
+- **main.py**: add command line interface framework (#7)
+
 ## v0.1.2 (2022-02-08)
 
 ### Refactor
