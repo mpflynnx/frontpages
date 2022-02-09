@@ -1,7 +1,10 @@
 from datetime import date, datetime
 from pathlib import Path
 
-from frontpages import file_functions, image_functions, web_functions
+import click
+
+from frontpages import (__version__, file_functions, image_functions,
+                        web_functions)
 
 ###################################################
 today = date.today()
@@ -19,7 +22,19 @@ dt_string = now.strftime("%Y:%m:%d %H:%M:%S")
 ###################################################
 
 
+def version_msg():
+    """Return the version."""
+    message = "frontpages v%(version)s"
+    return message
+
+
+@click.command()
+@click.version_option(__version__, "-V", "--version", message=version_msg())
 def main():
+    """
+    Frontpages will download, convert, apply exif data and rename English
+    newspaper front page image files from the BBC News website.
+    """
 
     save_location = Path.home() / "newspaper" / "front-pages"
     Path.mkdir(save_location, parents=True, exist_ok=True)
