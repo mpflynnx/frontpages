@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from exif import Image as eI
+from loguru import logger
 from PIL import Image
 
 from frontpages import file_functions
@@ -24,7 +25,7 @@ def pngConvert(abspath):
                     rgb_im = im.convert("RGB")
                     rgb_im.save(outfile, quality=95)
             except OSError:
-                print("cannot convert", infile)
+                logger.error("cannot convert", infile)
 
 
 def jpgDatetime(abspath, dt_string):
@@ -50,4 +51,4 @@ def jpgDatetime(abspath, dt_string):
             with open(outfile, "wb") as new_image_file:
                 new_image_file.write(my_image.get_file())
         except OSError:
-            print("cannot convert", infile)
+            logger.error("cannot convert", infile)

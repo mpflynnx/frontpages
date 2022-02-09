@@ -6,6 +6,7 @@ from datetime import date
 from os.path import basename
 
 import pathlib3x as pathlib
+from loguru import logger
 from pathlib3x import Path
 
 ###################################################
@@ -28,10 +29,10 @@ def rename_all4(myfile, string):
         dest = myfile.parent.absolute() / new  # create new full path with new filename
         if not dest.exists():
             os.rename(myfile, dest)  # rename src to dest
-            print(f"Filename '{myfile.name}' renamed to '{new}'.")
+            logger.info(f"Filename '{myfile.name}' renamed to '{new}'.")
             return
         else:
-            print(f"Filename '{dest.name}' already exists, will not rename.")
+            logger.info(f"Filename '{dest.name}' already exists, will not rename.")
             return
     return
 
@@ -47,24 +48,8 @@ def match(mylist):
         if re.search(regex, basename(mylist[i])):
             count += 1
             matches.append(mylist[i])
-    print("Found " + str(count) + " images.")
+    logger.info("Found " + str(count) + " matching images.")
     return matches
-
-
-#  def match2(mylist):
-    #  """
-    #  Return a list of regex matching items from mylist.
-    #  """
-    #  matches = []
-    #  count = 0
-    #  for i in range(len(mylist)):
-        #  #  regex = re.compile(r"^_12\d{7}_\w+")
-        #  regex = re.compile(r"^_12\d{7}_.+.jpg$") # must end in .jpg
-        #  if re.search(regex, basename(mylist[i])):
-            #  count += 1
-            #  matches.append(mylist[i])
-    #  print("Found " + str(count) + " images.")
-    #  return matches
 
 
 def prepend_date(myfiles):
@@ -88,16 +73,20 @@ def prepend_date(myfiles):
                 )  # create new full path with new filename
                 if not dest.exists():
                     os.rename(src, dest)  # rename src to dest
-                    print(f"Filename '{src.name}' renamed to '{new}'.")
+                    logger.info(f"Filename '{src.name}' renamed to '{new}'.")
                 else:
-                    print(f"Filename '{dest.name}' already exists, will not rename.")
+                    logger.info(
+                        f"Filename '{dest.name}' already exists, will not rename."
+                    )
                     continue
             else:
-                print(f"Filename '{src.name}' already prepended, will not rename.")
+                logger.info(
+                    f"Filename '{src.name}' already prepended, will not rename."
+                )
                 continue
 
         else:
-            print(f"Filename '{src.name}' missing, cannot rename.")
+            logger.info(f"Filename '{src.name}' missing, cannot rename.")
             continue
 
 
@@ -119,16 +108,20 @@ def rename_all2(myfiles):
                 )  # create new full path with new filename
                 if not dest.exists():
                     os.rename(src, dest)  # rename src to dest
-                    print(f"Filename '{src.name}' renamed to '{new}'.")
+                    logger.info(f"Filename '{src.name}' renamed to '{new}'.")
                 else:
-                    print(f"Filename '{dest.name}' already exists, will not rename.")
+                    logger.info(
+                        f"Filename '{dest.name}' already exists, will not rename."
+                    )
                     continue
             else:
-                print(f"Filename '{src.name}' doesn't match pattern, will not rename.")
+                logger.info(
+                    f"Filename '{src.name}' doesn't match pattern, will not rename."
+                )
                 continue
 
         else:
-            print(f"Filename '{src.name}' missing, cannot rename.")
+            logger.info(f"Filename '{src.name}' missing, cannot rename.")
             continue
 
 
@@ -144,12 +137,15 @@ def create_tmp():
     """
     Creates something like this '/tmp/tmpdyt9dmlq'
     """
-    return Path(tempfile.mkdtemp())
+    tmp = Path(tempfile.mkdtemp())
+    logger.info(f"Created new temporary directory: {tmp}")
+    return tmp
 
 
 def delete_tmp(tmp):
     """ """
     shutil.rmtree(tmp, ignore_errors=True)
+    logger.info(f"Removed temporary directory: {tmp}")
 
 
 def check_filename(myfiles, string):
@@ -177,3 +173,5 @@ def move_files(abspath, dest, ext):
 
     for i in range(len(movelist)):
         shutil.move(movelist[i], dest / movelist[i].name)
+
+    logger.info(f"Move processed images to: {dest}")

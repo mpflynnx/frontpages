@@ -1,10 +1,11 @@
+import sys
 from datetime import date, datetime
 from pathlib import Path
 
 import click
+from loguru import logger
 
-from frontpages import (__version__, file_functions, image_functions,
-                        web_functions)
+from frontpages import __version__, file_functions, image_functions, web_functions
 
 ###################################################
 today = date.today()
@@ -21,6 +22,8 @@ now = datetime.now()
 dt_string = now.strftime("%Y:%m:%d %H:%M:%S")
 ###################################################
 
+logger.remove()  # disable default loguru logging
+
 
 def version_msg():
     """Return the version."""
@@ -30,11 +33,19 @@ def version_msg():
 
 @click.command()
 @click.version_option(__version__, "-V", "--version", message=version_msg())
-def main():
+@click.option(
+    "-v", "--verbose", is_flag=True, help="Print debug information", default=False
+)
+def main(verbose):
     """
     Frontpages will download, convert, apply exif data and rename English
     newspaper front page image files from the BBC News website.
     """
+
+    if verbose is True:
+        logger.add(sys.stderr, level="DEBUG")
+    else:
+        logger.add(sys.stderr, level="CRITICAL")
 
     save_location = Path.home() / "newspaper" / "front-pages"
     Path.mkdir(save_location, parents=True, exist_ok=True)
@@ -43,24 +54,28 @@ def main():
 
     try:
         if file_functions.check_filename(list1, string):
-            raise ValueError(
-                f"Filenames starting with '{string}' already exist, exiting."
-            )
+            raise ValueError("Today's image downloads completed previously.")
 
     except ValueError as e:
-        exit(str(e))
+        logger.critical(e)
+        sys.exit(1)
 
     newlink = web_functions.find_href(homepage, hyperlink_text)
 
     fulllink = homepage[:21] + newlink
-    print(fulllink)
+    logger.info(f"Found weblink: {fulllink}")
 
     img_list1 = web_functions.get_images(fulllink)
 
     match_list1 = file_functions.match(img_list1)
 
-    if not len(match_list1) > 4:
-        raise ValueError("No images found, exiting.")
+    try:
+        if not len(match_list1) > 4:
+            raise ValueError("No images found, exiting.")
+
+    except ValueError as e:
+        logger.critical(e)
+        sys.exit(1)
 
     newtmp = file_functions.create_tmp()
 

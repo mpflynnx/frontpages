@@ -1,9 +1,11 @@
 import re
+import sys
 from os.path import basename
 from pathlib import Path
 
 import bs4
 import requests
+from loguru import logger
 
 
 def find_href(regurl, searchterm):
@@ -19,8 +21,14 @@ def find_href(regurl, searchterm):
     for link in soup.find_all(href=re.compile(searchterm), limit=1):
         lnk = link.get("href")
 
-    if lnk == "":
-        raise Exception(f"Couldn't find the search term '{searchterm}' at '{regurl}'")
+    try:
+        if lnk == "":
+            raise ValueError(
+                f"Couldn't find the search term '{searchterm}' at '{regurl}'"
+            )
+    except ValueError as e:
+        logger.critical(e)
+        sys.exit(1)
 
     return lnk
 
@@ -39,7 +47,7 @@ def get_images(url):
     for img in images:
         count += 1
         src.append(img.get("src"))
-    print("Found " + str(count) + " images.")
+    logger.info("Found " + str(count) + " images.")
     return src
 
 
@@ -57,4 +65,4 @@ def download2(mylist, dest):
         with filename.open(mode="wb") as f:
             f.write(requests.get(mylist[i]).content)
 
-    print("Downloaded " + str(downloadcount) + " images.")
+    logger.info("Downloaded " + str(downloadcount) + " images.")
