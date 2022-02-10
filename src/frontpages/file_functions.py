@@ -4,10 +4,9 @@ import shutil
 import tempfile
 from datetime import date
 from os.path import basename
+from pathlib import Path
 
-import pathlib3x as pathlib
 from loguru import logger
-from pathlib3x import Path
 
 ###################################################
 today = date.today()

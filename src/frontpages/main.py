@@ -5,7 +5,8 @@ from pathlib import Path
 import click
 from loguru import logger
 
-from frontpages import __version__, file_functions, image_functions, web_functions
+from frontpages import (__version__, file_functions, image_functions,
+                        web_functions)
 
 ###################################################
 today = date.today()
